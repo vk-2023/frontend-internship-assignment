@@ -1,23 +1,49 @@
 <div class="header">
   <div class="tw-text-24-px tw-font-600">Open Books Library</div>
-  <div class="search-button">
-    <mat-icon class="tw-mt-16-px" aria-label="Search Icon">search</mat-icon>
-    <input
-      [formControl]="bookSearch"
-      name="searchKey"
-      type="text"
-      placeholder="Search Books"
-      class="tw-border-0 tw-bg-inherit"
-    >
+  <div class="tw-flex tw-gap-2">
+    <div class="search-button">
+      <mat-icon class="tw-mt-16-px tw-m-1" aria-label="Search Icon">search</mat-icon>
+      <input [formControl]="bookSearch" name="searchKey" type="search" placeholder="Search Books By"
+        class="tw-border-0 tw-bg-inherit">
+    </div>
+    <select (change)="onOptionSelected($event.target)">
+      <option *ngFor="let option of searchOptions" [value]="option">{{option}}</option>
+    </select>
   </div>
 </div>
-<div class="tw-flex tw-flex-row tw-m-24-px">
+<div class="tw-flex tw-flex-row tw-m-24-px tw-gap-7">
   <section class="trending-subjects">
     <div class="tw-font-600 tw-text-24-px">Trending Subjects</div>
     <ul class="tw-list-none tw-pl-0">
-      <li class="tw-text-16-px tw-cursor-pointer tw-p-12-px" *ngFor="let subject of trendingSubjects" routerLink="/trending-subject/{{ subject.name }}">
+      <li class="tw-text-16-px tw-cursor-pointer tw-p-12-px" *ngFor="let subject of trendingSubjects"
+        routerLink="/trending-subject/{{ subject.name }}">
         {{ subject.name }}
       </li>
     </ul>
   </section>
+  <h1 *ngIf="searchValue===''">Search to find...</h1>
+  <!-- <h1 *ngIf="isLoading && searchValue!==''">Loading...</h1> -->
+  <h1 *ngIf="!isFound; else renderBooks">Books not Found!!</h1>
+
+  <ng-template #renderBooks >
+    <div class="tw-flex-row">
+
+      <front-end-internship-assignment-table-view [booksSearched]="booksSearched"
+        *ngIf="searchValue!=='' "></front-end-internship-assignment-table-view>
+      <!-- <front-end-internship-assignment-table-view [booksListByTitle]="booksByTitle"
+        *ngIf="searchValue!=='' && isSearchByTitle "></front-end-internship-assignment-table-view> -->
+      <!-- <front-end-internship-assignment-table-view [booksListByAuthor]="booksByAuthor"
+        *ngIf="searchValue!=='' && !isSearchByTitle "></front-end-internship-assignment-table-view> -->
+  
+      <front-end-internship-assignment-pagination *ngIf="isFound && searchValue!=='' && booksSearched.length>0" [totalItems]="totalItems" [pageSize]="limit" [currentPage]="currentPage" (pageChanged)="onPageChange($event)"></front-end-internship-assignment-pagination>
+    </div>
+
+  </ng-template>
+
+  <!-- <div>
+    <front-end-internship-assignment-pagination [totalItems]="totalItems" [currentPage]="currentPage" [pageSize]="pageSize" (pageChanged)="onPageChanged($event)"></front-end-internship-assignment-pagination>
+  </div> -->
+
+
+
 </div>

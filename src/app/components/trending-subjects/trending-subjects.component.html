@@ -1,4 +1,5 @@
-<div *ngIf="allBooks.length > 0">
+<button (click)="goBackToHome()">Go Back</button>
+<div>
   <front-end-internship-assignment-table-view
   [booksList]="allBooks"
   [subjectName]="subjectName"
